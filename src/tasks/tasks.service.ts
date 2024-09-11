@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { TgUserRepository } from './../db/tg-user.repository'
+import { TgUserRepository } from '../db/repositories/tg-user.repository'
 
 @Injectable()
 export class TasksService {

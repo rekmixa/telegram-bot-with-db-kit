@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { KnexModule } from 'nestjs-knex'
 import config from '../../knexfile'
-import { TgUserRepository } from './tg-user.repository'
+import { TgUserRepository } from './repositories/tg-user.repository'
 
 @Module({
   imports: [
