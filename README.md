@@ -1,6 +1,8 @@
 # telegram-bot-with-db-kit
 
 > Nest TS  
+> Knex  
+> node-telegram-bot-api  
 
 ## Installation
 
