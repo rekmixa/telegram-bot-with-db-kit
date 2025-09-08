@@ -15,13 +15,13 @@ export function bytesToSize(bytes: number): string {
 }
 
 export function showUptime(): string {
-  function format(time) {
-    function pad(s) {
+  function format(time: number) {
+    function pad(s: number) {
       return (s < 10 ? '0' : '') + s
     }
 
     const hours = Math.floor(time / (60 * 60))
-    const minutes = Math.floor(time % (60 * 60) / 60)
+    const minutes = Math.floor((time % (60 * 60)) / 60)
     const seconds = Math.floor(time % 60)
 
     return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds)
@@ -31,14 +31,18 @@ export function showUptime(): string {
 }
 
 export function filePutContents(filename: string, content: string): void {
-  require('fs').writeFile(filename, content, function (err) {
+  require('fs').writeFile(filename, content, function(err) {
     if (err) throw err
     console.log("It's saved!")
   })
 }
 
 export function convertTimeZone(date: Date | string, timeZone): Date {
-  return new Date((typeof date === 'string' ? new Date(date) : date).toLocaleString("en-US", { timeZone }))
+  return new Date(
+    (typeof date === 'string' ? new Date(date) : date).toLocaleString('en-US', {
+      timeZone,
+    }),
+  )
 }
 
 export function replaceAll(string: string, search: string, replace: string) {
