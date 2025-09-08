@@ -54,9 +54,9 @@ export abstract class BaseRepository<
   async persist(entity: TEntity | TInsert | TUpdate): Promise<TEntity> {
     let result: TEntity[]
 
-    if ((entity as any).id !== undefined) {
+    if ((entity as TEntity).id !== undefined) {
       result = ((await this.table()
-        .where('id', (entity as any).id)
+        .where('id', (entity as TEntity).id)
         .update({ ...(entity as any), updated_at: new Date() } as TUpdate)
         .returning('*')) as unknown) as TEntity[]
     } else {
@@ -70,5 +70,11 @@ export abstract class BaseRepository<
     }
 
     return result[0]
+  }
+
+  async delete(entity: TEntity): Promise<void> {
+    await this.table()
+      .where('id', entity.id)
+      .delete()
   }
 }

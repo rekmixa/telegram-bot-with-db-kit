@@ -11,7 +11,9 @@ export class TelegramService {
     @Inject(TgUserRepository)
     private readonly tgUserRepository: TgUserRepository,
   ) {
-    this.bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true })
+    this.bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, {
+      polling: true,
+    })
   }
 
   async onModuleInit(): Promise<void> {
@@ -29,6 +31,11 @@ export class TelegramService {
     this.bot.on('callback_query', async data => {
       try {
         if (data.data === 'ping') {
+          const tgUser = await this.tgUserRepository.findByChatId(data.from.id)
+          if (tgUser !== null) {
+            await this.tgUserRepository.delete(tgUser)
+          }
+
           console.log(data)
 
           await this.bot.answerCallbackQuery(data.id, {
@@ -74,7 +81,7 @@ export class TelegramService {
         tgUser.first_name = message.from.first_name
         tgUser.is_premium = message.from.is_premium
         tgUser.language_code = message.from.language_code
-        
+
         console.log(tgUser)
         const savedUser = await this.tgUserRepository.persist(tgUser)
         this.logger.debug(`Saved user ${savedUser.id}`)
@@ -88,10 +95,10 @@ export class TelegramService {
                 {
                   text: 'ping ',
                   callback_data: 'ping',
-                }
+                },
               ],
             ],
-          }
+          },
         })
       }
     } catch (error) {
@@ -105,10 +112,10 @@ export class TelegramService {
                 {
                   text: 'Попробовать снова',
                   callback_data: 'retry',
-                }
+                },
               ],
             ],
-          }
+          },
         })
       } catch (error) {
         this.logger.debug(error)
@@ -121,7 +128,11 @@ export class TelegramService {
     await this.bot.sendChatAction(chatId, 'typing')
   }
 
-  private async reply(chatId: string, text: string, options?: any): Promise<void> {
+  private async reply(
+    chatId: string,
+    text: string,
+    options?: any,
+  ): Promise<void> {
     await this.bot.sendMessage(chatId, text, options)
   }
 }
