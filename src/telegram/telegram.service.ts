@@ -95,7 +95,7 @@ export class TelegramService {
         })
       }
     } catch (error) {
-      this.logger.debug(error)
+      console.error(error)
 
       try {
         await this.reply(message.chat.id, 'Что-то пошло не так...', {
